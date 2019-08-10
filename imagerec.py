@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import time
 import PIL
 from PIL import Image
+from collections import Counter
 
 # def image_copy(image_array):
 #     image_copy = np.copy(image_array)
@@ -15,6 +16,37 @@ from PIL import Image
 #         use_normalized_coordinates=True,
 #         line_thickness=8)
 #     return image_copy
+
+def whatNumIsThis(filepath):
+    matchedAr = []
+
+    loadExamps = open('numArEx.txt', 'r').read()
+    loadExamps = loadExamps.split('\n')
+
+    i = Image.open(filepath)
+    iar = np.array(i)
+    iarl = iar.tolist()
+
+    inQuestion = str(iarl)
+    for eachExample in loadExamps:
+        if len(eachExample) > 3:
+            splitEx = eachExample.split('::')
+            currentNum = splitEx[0]
+            currentAr = splitEx[1]
+
+            eachPixEx = currentAr.split('],')
+            eachPixInQ = inQuestion.split('],')
+
+            x=0
+            while x < len(eachPixEx):
+                if eachPixEx[x] == eachPixInQ[x]:
+                    matchedAr.append(int(currentNum))
+                x += 1
+
+    print matchedAr
+    x = Counter(matchedAr)
+    print x
+
 
 def createExamples():
     numberArrayExamples = open('numArEx.txt', 'a')
@@ -58,32 +90,4 @@ def threshold(imageArray):
 
 if __name__ == '__main__':
 
-    createExamples()
-    # i = Image.open('images/numbers/0.1.png')
-    # iar = np.array(i)
-    # i2 = Image.open('images/numbers/y0.4.png')
-    # iar2 = np.array(i2)
-    # i3 = Image.open('images/numbers/y0.5.png')
-    # iar3 = np.array(i3)
-    # i4 = Image.open('images/sentdex.png')
-    # iar4 = np.array(i4)
-    #
-    #
-    # iar = threshold(iar)
-    # iar2 = threshold(iar2)
-    # iar3 = threshold(iar3)
-    # iar4 = threshold(iar4)
-    #
-    # fig = plt.figure()
-    # ax1 = plt.subplot2grid((8,6),(0,0), rowspan=4, colspan=3)
-    # ax2 = plt.subplot2grid((8,6),(4,0), rowspan=4, colspan=3)
-    # ax3 = plt.subplot2grid((8,6),(0,3), rowspan=4, colspan=3)
-    # ax4 = plt.subplot2grid((8,6),(4,3), rowspan=4, colspan=3)
-    #
-    # ax1.imshow(iar)
-    # ax2.imshow(iar2)
-    # ax3.imshow(iar3)
-    # ax4.imshow(iar4)
-    #
-    #
-    # plt.show()
+    whatNumIsThis('images/test2.png')
