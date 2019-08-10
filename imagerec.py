@@ -16,6 +16,20 @@ from PIL import Image
 #         line_thickness=8)
 #     return image_copy
 
+def createExamples():
+    numberArrayExamples = open('numArEx.txt', 'a')
+    numbersWeHave = range(0, 10)
+    versionsWeHave = range(1, 10)
+
+    for eachNum in numbersWeHave:
+        for eachVersion in versionsWeHave:
+            imageFilePath = 'images/numbers/' + str(eachNum) + '.' + str(eachVersion) + '.png'
+            ei = Image.open(imageFilePath)
+            eiar = np.array(ei)
+            eiar1 = str(eiar.tolist())
+
+            lineToWrite = str(eachNum) + '::' + eiar1 + '\n'
+            numberArrayExamples.write(lineToWrite)
 
 def threshold(imageArray):
 
@@ -44,31 +58,32 @@ def threshold(imageArray):
 
 if __name__ == '__main__':
 
-    i = Image.open('images/numbers/0.1.png')
-    iar = np.array(i)
-    i2 = Image.open('images/numbers/y0.4.png')
-    iar2 = np.array(i2)
-    i3 = Image.open('images/numbers/y0.5.png')
-    iar3 = np.array(i3)
-    i4 = Image.open('images/sentdex.png')
-    iar4 = np.array(i4)
-
-
-    iar = threshold(iar)
-    iar2 = threshold(iar2)
-    iar3 = threshold(iar3)
-    iar4 = threshold(iar4)
-
-    fig = plt.figure()
-    ax1 = plt.subplot2grid((8,6),(0,0), rowspan=4, colspan=3)
-    ax2 = plt.subplot2grid((8,6),(4,0), rowspan=4, colspan=3)
-    ax3 = plt.subplot2grid((8,6),(0,3), rowspan=4, colspan=3)
-    ax4 = plt.subplot2grid((8,6),(4,3), rowspan=4, colspan=3)
-
-    ax1.imshow(iar)
-    ax2.imshow(iar2)
-    ax3.imshow(iar3)
-    ax4.imshow(iar4)
-
-
-    plt.show()
+    createExamples()
+    # i = Image.open('images/numbers/0.1.png')
+    # iar = np.array(i)
+    # i2 = Image.open('images/numbers/y0.4.png')
+    # iar2 = np.array(i2)
+    # i3 = Image.open('images/numbers/y0.5.png')
+    # iar3 = np.array(i3)
+    # i4 = Image.open('images/sentdex.png')
+    # iar4 = np.array(i4)
+    #
+    #
+    # iar = threshold(iar)
+    # iar2 = threshold(iar2)
+    # iar3 = threshold(iar3)
+    # iar4 = threshold(iar4)
+    #
+    # fig = plt.figure()
+    # ax1 = plt.subplot2grid((8,6),(0,0), rowspan=4, colspan=3)
+    # ax2 = plt.subplot2grid((8,6),(4,0), rowspan=4, colspan=3)
+    # ax3 = plt.subplot2grid((8,6),(0,3), rowspan=4, colspan=3)
+    # ax4 = plt.subplot2grid((8,6),(4,3), rowspan=4, colspan=3)
+    #
+    # ax1.imshow(iar)
+    # ax2.imshow(iar2)
+    # ax3.imshow(iar3)
+    # ax4.imshow(iar4)
+    #
+    #
+    # plt.show()
