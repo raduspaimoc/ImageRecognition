@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+import cv2
 import PIL
 from PIL import Image
 from collections import Counter
@@ -26,8 +27,9 @@ def whatNumIsThis(filepath):
     loadExamps = loadExamps.split('\n')
 
     i = Image.open(filepath)
+    i = i.convert('L')
     iar = np.array(i)
-    iar = threshold(iar)
+    #iar = threshold(iar)
     iarl = iar.tolist()
 
     inQuestion = str(iarl)
@@ -119,13 +121,91 @@ def threshold(imageArray):
 
 if __name__ == '__main__':
 
+    #imageFilePath = 'test.png'
+    #imageFilePath = 'images/numbers/0.1.png'
+
+    # imageFilePath = 'images/numbers/3.6.png'
+    # ei = Image.open(imageFilePath)
+    # ei = ei.convert('L')
+    # #ei = ei.convert('RGB')
+    # eiar = np.array(ei)
+    # eiar.tolist()
+    # print eiar
+    #
+    # print('\n' + '-----------------------' + '\n')
+
+    imageFilePath = 'test.png'
+    ei = Image.open(imageFilePath)
+    ei = ei.convert('L')
+    #ei = ei.convert('RGB')
+    eiar = np.array(ei)
+    eiar.tolist()
+    list = []
+    for row in eiar:
+        aux = []
+        for number in row:
+            if number < 200:
+                aux.append(0)
+            else:
+                aux.append(255)
+        list.append(aux)
+    eiar = list
+    print eiar
+    print('\n' + '-----------------------' + '\n')
+    numbersWeHave = range(0, 10)
+    versionsWeHave = range(1, 10)
+
+    matchedAr = []
+    for eachNum in numbersWeHave:
+        for eachVersion in versionsWeHave:
+            imageFilePath = 'images/numbers/' + str(eachNum) + '.' + str(eachVersion) + '.png'
+            ei = Image.open(imageFilePath)
+            ei = ei.convert('L')
+            eiar1 = np.array(ei)
+            #eiar1 = str(eiar.tolist())
+            #print("Num: 3 version: ", eachVersion)
+            #print eiar1
+
+            y = 0
+            x = 0
+            #print x , "x i :. ", len(eiar1)
+            while x < len(eiar1):
+                y = 0
+                while y < 8:
+                    #print "comparing:::", eiar1[x][y], " with: ", eiar[x][y]
+                    if eiar1[x][y] == eiar[x][y]:
+                        matchedAr.append(int(eachNum))
+                    y += 1
+                x += 1
+
+    print matchedAr
+    x = Counter(matchedAr)
+    print x
     #whatNumIsThis('test.png')
 
-    # Resize image to 8x8px
-    fd_img = open('images-to-resize/numred3.jpg')
-    img = Image.open(fd_img)
-    img = resizeimage.resize_thumbnail(img, [8, 8], resample=Image.LANCZOS)
-    #img = resizeimage.resize_cover(img, [8, 8])
-    img.save('test.png', 'png')
-    fd_img.close()
-    whatNumIsThis('test.png')
+    # Step 1 ===> Convert image to black and white
+    # originalImage = cv2.imread('images-to-resize/numred3.jpg')
+    # grayImage = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
+    # (thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+    #
+    # cv2.imshow('Black white image', blackAndWhiteImage)
+    # cv2.imwrite("image_processed.png", blackAndWhiteImage)
+
+    # Step 2 ===> Resize image to 8x8px
+    # fd_img = open('image_processed.png')
+    # img = Image.open(fd_img)
+    # img = resizeimage.resize_thumbnail(img, [8, 8], resample=Image.LANCZOS)
+    # img.save('test.png', 'png')
+
+
+    #cv2.imshow('Original image',originalImage)
+    #cv2.imshow('Gray image', grayImage)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
+
+    # img = Image.open(fd_img)
+    # img = resizeimage.resize_thumbnail(img, [8, 8], resample=Image.LANCZOS)
+    # #img = resizeimage.resize_cover(img, [8, 8])
+    # img.save('test.png', 'png')
+    # fd_img.close()
+    # whatNumIsThis('test.png')
