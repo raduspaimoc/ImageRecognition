@@ -42,3 +42,4 @@ if __name__ == '__main__':
     plt.imshow(x_test[image_index].reshape(28, 28),cmap='Greys')
     pred = model.predict(x_test[image_index].reshape(1, img_rows, img_cols, 1))
     print(pred.argmax())
+    #A ver si funca lol
